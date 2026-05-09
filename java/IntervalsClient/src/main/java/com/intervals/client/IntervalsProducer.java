@@ -36,8 +36,10 @@ public class IntervalsProducer implements AutoCloseable {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, (int) Duration.ofSeconds(10).toMillis());
-        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, (int) Duration.ofSeconds(15).toMillis());
+        props.put(ProducerConfig.LINGER_MS_CONFIG, (int) Duration.ofMillis(50).toMillis());
+        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, (int) Duration.ofSeconds(8).toMillis());
+        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, (int) Duration.ofSeconds(10).toMillis());
+        props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, (int) Duration.ofSeconds(10).toMillis());
         props.putAll(auth.getKafkaProperties(username));
 
         return new KafkaProducer<>(props);
@@ -48,6 +50,8 @@ public class IntervalsProducer implements AutoCloseable {
     }
 
     public void execute(Schedule schedule, Notification notification) {
+        Objects.requireNonNull(schedule, "Schedule should not be null.");
+        Objects.requireNonNull(notification, "Notification should not be null.");
         String topic = String.format("assignments.%s", tenantName);
         RecordHeader scheduleHeader = new RecordHeader(
                 "intervals-schedule",
