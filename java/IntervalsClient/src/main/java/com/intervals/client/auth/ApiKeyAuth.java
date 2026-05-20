@@ -9,17 +9,9 @@ import java.util.Map;
 
 public class ApiKeyAuth implements Auth {
     private final String password;
-    private final String truststoreLocation;
-    private final String truststorePassword;
 
-    public ApiKeyAuth(
-            String password,
-            String truststoreLocation,
-            String truststorePassword
-    ) {
-        this.password = password;
-        this.truststoreLocation = truststoreLocation;
-        this.truststorePassword = truststorePassword;
+    public ApiKeyAuth(String apiKey) {
+        this.password = apiKey;
     }
 
     @Override
@@ -34,8 +26,6 @@ public class ApiKeyAuth implements Auth {
                 password
         );
         producerProps.put(SaslConfigs.SASL_JAAS_CONFIG, jassConfig);
-        producerProps.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststoreLocation);
-        producerProps.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, truststorePassword);
         return producerProps;
     }
 }
