@@ -16,21 +16,16 @@ import java.util.UUID;
 import static org.mockito.Mockito.verify;
 
 public class IntervalsClientTest {
+    private static final String intervalsHosts = "kafka.intervals.solutions:19098,kafka.intervals.solutions:29098";
     private static String tenantName;
     private static String producerPassword;
     private static String consumerPassword;
-    private static String truststoreLocation;
-    private static String truststorePassword;
-    private static String intervalsHosts;
 
     @BeforeAll
     static void setUp() {
         tenantName = System.getenv("TENANT_NAME");
         producerPassword = System.getenv("PRODUCER_PASSWORD");
         consumerPassword = System.getenv("CONSUMER_PASSWORD");
-        truststoreLocation = System.getenv("TRUSTSTORE_LOCATION");
-        truststorePassword = System.getenv("TRUSTSTORE_PASSWORD");
-        intervalsHosts = System.getenv("INTERVALS_HOSTS");
     }
 
     @Test
@@ -65,14 +60,14 @@ public class IntervalsClientTest {
 
     private static IntervalsProducer createProducer() {
         IntervalsProducerBuilder producerBuilder = new IntervalsProducerBuilder(tenantName)
-                .auth(new ApiKeyAuth(producerPassword, truststoreLocation, truststorePassword))
+                .auth(new ApiKeyAuth(producerPassword))
                 .hosts(intervalsHosts);
         return producerBuilder.build();
     }
 
     private static IntervalsConsumer createConsumer(Execution execution) {
         IntervalsConsumerBuilder consumerBuilder = new IntervalsConsumerBuilder(tenantName)
-                .auth(new ApiKeyAuth(consumerPassword, truststoreLocation, truststorePassword))
+                .auth(new ApiKeyAuth(consumerPassword))
                 .hosts(intervalsHosts)
                 .execute(execution);
         return consumerBuilder.build();
