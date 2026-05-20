@@ -2,7 +2,6 @@ package com.intervals.client.auth;
 
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SaslConfigs;
-import org.apache.kafka.common.config.SslConfigs;
 
 import java.util.HashMap;
 import java.util.Map;
